@@ -1,0 +1,82 @@
+QUESTIONS ET RÉPONSES SUR JAVA - TRÈS COURT
+
+JPMS (Java Platform Module System)
+Q: Qu'est-ce que JPMS ?
+R: module-info.java - requires (dépendances) - exports (packages visibles) - Encapsulation forte
+
+HashMap vs ConcurrentHashMap
+Q: Différence HashMap/ConcurrentHashMap ?
+R: HashMap = non thread-safe, rapide, nulls autorisés
+ConcurrentHashMap = thread-safe, performant, pas de nulls
+
+API Streams
+Q: C'est quoi l'API Streams ?
+R: Traitement fonctionnel des collections - filter/map/reduce - Exécution paresseuse
+
+WeakReference
+Q: C'est quoi WeakReference ?
+R: N'empêche pas le garbage collection - GC peut collecter sans références fortes
+
+HashMap Interne
+Q: Fonctionnement interne HashMap ?
+R: Tableaux de buckets - hashCode() → bucket - equals() pour clés - Collisions → listes/arbres
+
+Développement Réactif
+Q: Développement réactif ?
+R: Asynchrone non-bloquant - Flux d'événements - Gestion backpressure
+
+Thread vs Processus
+Q: Thread vs Processus ?
+R: Processus = mémoire séparée, lourd - Thread = mémoire partagée, léger
+
+Volatile
+Q: Mot-clé volatile ?
+R: Variable lue depuis mémoire principale - Visibilité entre threads
+
+Classes Atomiques
+Q: Classes atomiques ?
+R: Opérations thread-safe sans synchronisation - CAS (Compare-And-Swap)
+
+Future et Callable
+Q: Future et Callable ?
+R: Callable = travail asynchrone avec retour - Future = résultat asynchrone futur
+
+CompletableFuture vs Future
+Q: CompletableFuture vs Future ?
+R: Future = résultat basique - CompletableFuture = chaînage opérations asynchrones
+
+WebFlux
+Q: C'est quoi WebFlux ?
+R: Framework web réactif Spring - Non-bloquant - Support backpressure
+
+WebFlux vs MVC
+Q: WebFlux vs MVC ?
+R: MVC = bloquant (thread par requête) - WebFlux = non-bloquant réactif
+
+RouterFunction WebFlux
+Q: RouterFunction WebFlux ?
+R: Routage fonctionnel programmatique - Alternative aux annotations
+
+WebClient Réactif
+Q: WebClient réactif ?
+R: Client HTTP réactif - Non-bloquant - Alternative à RestTemplate
+
+Server-Sent Events (SSE)
+Q: Server-Sent Events ?
+R: Server push données vers client - Communication unidirectionnelle
+
+WebSocket Réactif
+Q: WebSocket réactif ?
+R: Communication bidirectionnelle temps-réel - Full-duplex réactif
+
+Interfaces Streams
+Q: Interfaces fonctionnelles streams ?
+R: Predicate (test/filter) - Function (apply/map) - Consumer (accept/forEach) - Supplier (get/generate)
+
+Principes SOLID
+Q: Principes SOLID avec exemples ?
+R: S - Responsabilité unique (UserService/EmailService)
+O - Ouvert/fermé (CreditCardPayment sans modifier PaymentProcessor)
+L - Liskov (Square remplace Rectangle)
+I - Ségrégation interfaces (Flyable + Swimmable)
+D - Inversion dépendances (Service → Interface Repository)
