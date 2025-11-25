@@ -494,7 +494,7 @@
         // Charger les données JSON
         async function loadQuestionsData() {
             try {
-                const response = await fetch('questions-reponses1.json');
+                const response = await fetch('qa.json');
                 if (!response.ok) {
                     throw new Error('Fichier JSON non trouvé');
                 }
