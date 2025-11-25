@@ -1,0 +1,694 @@
+{
+  "java": {
+    "fondamentaux": [
+      {
+        "question": "Différence entre JVM, JRE et JDK ?",
+        "reponse": "JVM exécute bytecode, JRE = JVM + libs, JDK = JRE + outils dev"
+      },
+      {
+        "question": "Qu'est-ce que le bytecode ?",
+        "reponse": "Code intermédiaire exécuté par la JVM, indépendant de la plateforme"
+      },
+      {
+        "question": "Comment fonctionne le garbage collector ?",
+        "reponse": "Supprime objets non référencés automatiquement, algorithmes: G1, Parallel, ZGC"
+      },
+      {
+        "question": "Qu'est-ce que la JIT compilation ?",
+        "reponse": "Compilation Just-In-Time du bytecode en code natif pour performance"
+      },
+      {
+        "question": "ArrayList vs LinkedList ?",
+        "reponse": "ArrayList: accès O(1), insertion lente. LinkedList: accès O(n), insertion O(1)"
+      },
+      {
+        "question": "Exemple de polymorphisme ?",
+        "reponse": "Référence Animal qui pointe vers objet Chien, même méthode comportement différent"
+      },
+      {
+        "question": "Classe abstraite vs interface ?",
+        "reponse": "Classe abstraite: constructeurs, héritage simple. Interface: multiple, méthodes défaut"
+      },
+      {
+        "question": "Types d'exceptions ?",
+        "reponse": "Checked (obligatoire), Unchecked (Runtime), Error (système)"
+      },
+      {
+        "question": "Rôle du mot-clé synchronized ?",
+        "reponse": "Garantit un seul thread à la fois, évite race conditions"
+      },
+      {
+        "question": "Qu'est-ce que la réflexion ?",
+        "reponse": "Inspecter/modifier structure et comportement à l'exécution"
+      },
+      {
+        "question": "À quoi servent les génériques ?",
+        "reponse": "Sécurité de type à la compilation, réutilisation du code"
+      },
+      {
+        "question": "Qu'est-ce qu'un Enum ?",
+        "reponse": "Type spécial pour ensemble fixe de constantes"
+      },
+      {
+        "question": "== vs equals() ?",
+        "reponse": "== compare références, equals() compare contenu"
+      },
+      {
+        "question": "Comment implémenter un Singleton ?",
+        "reponse": "Constructeur privé, champ statique, méthode getInstance()"
+      },
+      {
+        "question": "Comment créer un objet immutable ?",
+        "reponse": "Classe finale, champs finaux, pas de setters"
+      },
+      {
+        "question": "Pattern Builder ?",
+        "reponse": "Construction objets complexes étape par étape"
+      },
+      {
+        "question": "Pourquoi utiliser Optional ?",
+        "reponse": "Éviter NullPointerException, représenter optionalité"
+      },
+      {
+        "question": "Nouveautés Java 8 ?",
+        "reponse": "Lambdas, Stream API, Optional, méthodes défaut interfaces"
+      },
+      {
+        "question": "CompletableFuture ?",
+        "reponse": "Programmation asynchrone non-bloquante, chaînage opérations"
+      },
+      {
+        "question": "Modules Java (JPMS) ?",
+        "reponse": "Système modules Java 9, structuration applications"
+      },
+      {
+        "question": "HashMap vs ConcurrentHashMap ?",
+        "reponse": "HashMap non thread-safe, ConcurrentHashMap thread-safe performances"
+      },
+      {
+        "question": "API Stream ?",
+        "reponse": "Traitement séquentiel/parallèle collections avec opérations fonctionnelles"
+      },
+      {
+        "question": "WeakReference ?",
+        "reponse": "Référence qui n'empêche pas garbage collection"
+      },
+      {
+        "question": "Comment déboguer application Java ?",
+        "reponse": "Debugger points arrêt, logs, profiling VisualVM"
+      },
+      {
+        "question": "Exemples d'annotations ?",
+        "reponse": "@Override, @Deprecated, @Autowired, annotations personnalisées"
+      }
+    ],
+    
+    "concurrence": [
+      {
+        "question": "Thread vs Process ?",
+        "reponse": "Thread partage mémoire processus, processus mémoire séparée"
+      },
+      {
+        "question": "Comment créer un thread ?",
+        "reponse": "Étendre Thread class ou implémenter Runnable interface"
+      },
+      {
+        "question": "volatile keyword ?",
+        "reponse": "Garantit visibilité modifications entre threads"
+      },
+      {
+        "question": "Atomic classes ?",
+        "reponse": "AtomicInteger, AtomicReference - opérations atomiques sans synchronized"
+      },
+      {
+        "question": "ThreadPoolExecutor ?",
+        "reponse": "Gestion pool threads réutilisables"
+      },
+      {
+        "question": "Future et Callable ?",
+        "reponse": "Callable retourne résultat, Future récupère résultat asynchrone"
+      },
+      {
+        "question": "CountDownLatch ?",
+        "reponse": "Synchronisation attente multiple threads"
+      },
+      {
+        "question": "CyclicBarrier ?",
+        "reponse": "Point rendez-vous multiple threads"
+      },
+      {
+        "question": "Semaphore ?",
+        "reponse": "Contrôle accès ressources avec permits"
+      },
+      {
+        "question": "ReentrantLock ?",
+        "reponse": "Lock explicite plus flexible que synchronized"
+      },
+      {
+        "question": "Deadlock conditions ?",
+        "reponse": "Mutual exclusion, hold and wait, no preemption, circular wait"
+      },
+      {
+        "question": "Comment éviter deadlock ?",
+        "reponse": "Ordre consistent acquisition locks, timeout, avoidance algorithms"
+      },
+      {
+        "question": "ThreadLocal ?",
+        "reponse": "Variable locale à chaque thread"
+      },
+      {
+        "question": "ForkJoinPool ?",
+        "reponse": "Pool threads pour tâches divisibles (divide and conquer)"
+      },
+      {
+        "question": "CompletableFuture vs Future ?",
+        "reponse": "CompletableFuture non-bloquant, composition, exception handling"
+      }
+    ]
+  },
+
+  "spring": {
+    "core": [
+      {
+        "question": "Spring Framework ?",
+        "reponse": "Framework Java entreprise basé IoC et AOP"
+      },
+      {
+        "question": "IoC (Inversion of Control) ?",
+        "reponse": "Contrôle création objets délégué au conteneur Spring"
+      },
+      {
+        "question": "Injection dépendances ?",
+        "reponse": "Dépendances fournies par conteneur plutôt que créées par objet"
+      },
+      {
+        "question": "Bean Spring ?",
+        "reponse": "Objet instancié, assemblé, géré par conteneur IoC"
+      },
+      {
+        "question": "@Component vs @Service vs @Repository ?",
+        "reponse": "Tous stéréotypes @Component. @Service métier, @Repository données + exceptions"
+      },
+      {
+        "question": "Spring Boot ?",
+        "reponse": "Extension Spring simplification configuration, auto-configuration"
+      },
+      {
+        "question": "Auto-configuration ?",
+        "reponse": "Configuration automatique beans basée classpath via @Conditional"
+      },
+      {
+        "question": "Starter Spring Boot ?",
+        "reponse": "Ensemble dépendances prédéfinies technologie spécifique"
+      },
+      {
+        "question": "Spring MVC ?",
+        "reponse": "Framework web pattern Model-View-Controller"
+      },
+      {
+        "question": "Spring Data JPA ?",
+        "reponse": "Simplification repositories JPA, réduction code boilerplate"
+      },
+      {
+        "question": "Spring Security ?",
+        "reponse": "Sécurisation applications (auth, authorization, protection attaques)"
+      },
+      {
+        "question": "Spring AOP ?",
+        "reponse": "Programmation Aspect préoccupations transversales (logging, sécurité)"
+      },
+      {
+        "question": "ApplicationContext ?",
+        "reponse": "Interface centrale conteneur Spring fournissant configuration"
+      },
+      {
+        "question": "@Autowired vs @Resource ?",
+        "reponse": "@Autowired Spring spécifique, @Resource standard Java EE"
+      },
+      {
+        "question": "Profil Spring ?",
+        "reponse": "Configurations différentes environnements (dev, test, prod)"
+      },
+      {
+        "question": "Gestion transactions @Transactional ?",
+        "reponse": "Délimitation transaction déclarative"
+      },
+      {
+        "question": "Spring Actuator ?",
+        "reponse": "Endpoints monitoring et gestion application (health, metrics)"
+      },
+      {
+        "question": "Tester application Spring Boot ?",
+        "reponse": "@SpringBootTest intégration, @WebMvcTest contrôleurs, @DataJpaTest JPA"
+      },
+      {
+        "question": "Spring Cloud ?",
+        "reponse": "Projets applications cloud-native et microservices"
+      },
+      {
+        "question": "Externaliser configuration ?",
+        "reponse": "application.properties/yml, profiles, services configuration externes"
+      }
+    ],
+
+    "boot": [
+      {
+        "question": "Avantages Spring Boot ?",
+        "reponse": "Auto-configuration, starters, serveur embarqué, configuration minimale"
+      },
+      {
+        "question": "Embedded servers ?",
+        "reponse": "Tomcat, Jetty, Undertow intégrés sans déploiement externe"
+      },
+      {
+        "question": "Spring Boot DevTools ?",
+        "reponse": "Redémarrage automatique, live reload, développement rapide"
+      },
+      {
+        "question": "Configuration properties ?",
+        "reponse": "@ConfigurationProperties liaison properties vers beans"
+      },
+      {
+        "question": "Spring Boot starters ?",
+        "reponse": "spring-boot-starter-web, data-jpa, security, test"
+      },
+      {
+        "question": "Spring Boot CLI ?",
+        "reponse": "Command line interface développement rapide applications"
+      },
+      {
+        "question": "Spring Boot executable JAR ?",
+        "reponse": "JAR auto-contenu avec serveur embarqué, java -jar execution"
+      },
+      {
+        "question": "Spring Boot profiles ?",
+        "reponse": "spring.profiles.active=dev, application-dev.properties"
+      },
+      {
+        "question": "Spring Boot metrics ?",
+        "reponse": "Actuator endpoints /metrics, /health, /info"
+      },
+      {
+        "question": "Custom starter création ?",
+        "reponse": "@Configuration, @Conditional, spring.factories, auto-configuration"
+      }
+    ]
+  },
+
+  "poo": {
+    "encapsulation": [
+      {
+        "question": "Définition encapsulation ?",
+        "reponse": "Regroupement données et méthodes avec contrôle accès (private, protected, public)"
+      },
+      {
+        "question": "Avantages encapsulation ?",
+        "reponse": "Sécurité données, maintenance, flexibilité modification interne"
+      },
+      {
+        "question": "Getters et setters rôle ?",
+        "reponse": "Contrôle accès attributs, validation, logique supplémentaire"
+      },
+      {
+        "question": "private vs protected vs public ?",
+        "reponse": "private: classe seule, protected: package + sous-classes, public: tous"
+      },
+      {
+        "question": "Package visibility ?",
+        "reponse": "Visibilité par défaut, accessible dans même package"
+      },
+      {
+        "question": "Data hiding ?",
+        "reponse": "Masquage implémentation, exposition seulement interface publique"
+      },
+      {
+        "question": "Encapsulation JavaBeans ?",
+        "reponse": "Convention getters/setters, sérialisation, introspection"
+      },
+      {
+        "question": "Immutable objects encapsulation ?",
+        "reponse": "Champs finaux, pas de setters, constructeur initialisation"
+      },
+      {
+        "question": "Builder pattern encapsulation ?",
+        "reponse": "Construction contrôlée objets complexes"
+      },
+      {
+        "question": "Encapsulation collections ?",
+        "reponse": "Retourner copies non modifiables plutôt que références internes"
+      }
+    ],
+
+    "heritage": [
+      {
+        "question": "Définition héritage ?",
+        "reponse": "Mécanisme classe enfant acquiert propriétés classe parent"
+      },
+      {
+        "question": "extends keyword ?",
+        "reponse": "Mot-clé Java pour héritage classe"
+      },
+      {
+        "question": "super() usage ?",
+        "reponse": "Appel constructeur classe parent"
+      },
+      {
+        "question": "Héritage multiple ?",
+        "reponse": "Non supporté classes Java, mais interfaces multiple"
+      },
+      {
+        "question": "Override méthodes ?",
+        "reponse": "Redéfinition méthode parent avec même signature"
+      },
+      {
+        "question": "@Override annotation ?",
+        "reponse": "Indique redéfinition, vérification compilation"
+      },
+      {
+        "question": "final class ?",
+        "reponse": "Classe non extensible, pas d'héritage"
+      },
+      {
+        "question": "final method ?",
+        "reponse": "Méthode non redéfinissable dans sous-classes"
+      },
+      {
+        "question": "Abstract class héritage ?",
+        "reponse": "Classe abstraite doit être héritée pour instanciation"
+      },
+      {
+        "question": "Composition vs héritage ?",
+        "reponse": "Composition: contient objets, héritage: est un type de"
+      }
+    ]
+  },
+
+  "solid": {
+    "srp": [
+      {
+        "question": "Principe Responsabilité Unique ?",
+        "reponse": "Une classe = une seule raison de changer"
+      },
+      {
+        "question": "Exemple violation SRP ?",
+        "reponse": "Classe qui gère données + logique métier + persistence"
+      },
+      {
+        "question": "Comment respecter SRP ?",
+        "reponse": "Séparer responsabilités dans classes différentes"
+      },
+      {
+        "question": "SRP et couplage ?",
+        "reponse": "Réduction couplage, classes plus focussées"
+      },
+      {
+        "question": "SRP testing ?",
+        "reponse": "Tests plus simples, responsabilités isolées"
+      }
+    ],
+
+    "ocp": [
+      {
+        "question": "Principe Ouvert/Fermé ?",
+        "reponse": "Ouvert extension, fermé modification"
+      },
+      {
+        "question": "Exemple OCP ?",
+        "reponse": "Interface Shape avec Circle, Rectangle implémentations"
+      },
+      {
+        "question": "Comment implémenter OCP ?",
+        "reponse": "Utiliser abstractions (interfaces, classes abstraites)"
+      },
+      {
+        "question": "OCP et polymorphisme ?",
+        "reponse": "Polymorphisme permet extension sans modification existant"
+      },
+      {
+        "question": "Strategy pattern OCP ?",
+        "reponse": "Algorithms interchangeables sans modifier contexte"
+      }
+    ]
+  },
+
+  "patterns_design": {
+    "creation": [
+      {
+        "question": "Singleton pattern ?",
+        "reponse": "Garantit une seule instance classe, accès global"
+      },
+      {
+        "question": "Factory pattern ?",
+        "reponse": "Délègue création objets à classe spécialisée"
+      },
+      {
+        "question": "Abstract Factory ?",
+        "reponse": "Famille objets liés sans spécifier classes concrètes"
+      },
+      {
+        "question": "Builder pattern ?",
+        "reponse": "Construction objets complexes étape par étape"
+      },
+      {
+        "question": "Prototype pattern ?",
+        "reponse": "Création nouveaux objets par copie prototype existant"
+      }
+    ],
+
+    "architecture": [
+      {
+        "question": "2-tier architecture ?",
+        "reponse": "Client-Server, présentation + données dans deux layers"
+      },
+      {
+        "question": "3-tier architecture ?",
+        "reponse": "Présentation, métier, données - séparation concerns"
+      },
+      {
+        "question": "Microservices architecture ?",
+        "reponse": "Applications ensemble petits services indépendants"
+      },
+      {
+        "question": "Monolith vs Microservices ?",
+        "reponse": "Monolith: simple déploiement, Microservices: scalabilité, indépendance"
+      },
+      {
+        "question": "MVC pattern ?",
+        "reponse": "Model-View-Controller séparation données, vue, contrôleur"
+      }
+    ]
+  },
+
+  "dev_reactif": {
+    "webflux": [
+      {
+        "question": "Spring WebFlux ?",
+        "reponse": "Framework web réactif non-bloquant Spring"
+      },
+      {
+        "question": "WebFlux vs MVC ?",
+        "reponse": "MVC bloquant thread-per-request, WebFlux non-bloquant event-loop"
+      },
+      {
+        "question": "RouterFunction WebFlux ?",
+        "reponse": "Définition routes fonctionnelle alternative @Controller"
+      },
+      {
+        "question": "WebClient réactif ?",
+        "reponse": "Client HTTP non-bloquant pour appels externes"
+      },
+      {
+        "question": "Server-Sent Events ?",
+        "reponse": "Flux données du serveur vers client en temps réel"
+      }
+    ],
+
+    "project_reactor": [
+      {
+        "question": "Project Reactor ?",
+        "reponse": "Bibliothèque réactive Java, base WebFlux"
+      },
+      {
+        "question": "Mono vs Flux ?",
+        "reponse": "Mono: 0-1 élément, Flux: 0-N éléments"
+      },
+      {
+        "question": "Opérateurs Reactor ?",
+        "reponse": "map, flatMap, filter, reduce, zip, timeout"
+      },
+      {
+        "question": "Backpressure ?",
+        "reponse": "Contrôle flux consommateur vitesse producteur"
+      },
+      {
+        "question": "Gestion erreurs réactif ?",
+        "reponse": "onErrorReturn, onErrorResume, retry, doOnError"
+      }
+    ]
+  },
+
+  "methodologies": {
+    "tdd": [
+      {
+        "question": "TDD définition ?",
+        "reponse": "Test-Driven Development - tests avant code"
+      },
+      {
+        "question": "Cycle TDD ?",
+        "reponse": "Red → Green → Refactor"
+      },
+      {
+        "question": "Avantages TDD ?",
+        "reponse": "Code testé, design meilleur, documentation vivante"
+      },
+      {
+        "question": "Types tests TDD ?",
+        "reponse": "Unit tests, integration tests, acceptance tests"
+      },
+      {
+        "question": "Mocking TDD ?",
+        "reponse": "Isolation tests avec mocks dépendances externes"
+      }
+    ],
+
+    "ddd": [
+      {
+        "question": "DDD définition ?",
+        "reponse": "Domain-Driven Design - conception centrée domaine métier"
+      },
+      {
+        "question": "Ubiquitous Language ?",
+        "reponse": "Langage commun développeurs et experts métier"
+      },
+      {
+        "question": "Bounded Context ?",
+        "reponse": "Limite contexte où modèle spécifique a sens"
+      },
+      {
+        "question": "Entity vs Value Object ?",
+        "reponse": "Entity: identité, Value Object: défini par attributs"
+      },
+      {
+        "question": "Aggregate Root ?",
+        "reponse": "Point entrée agrégat, garant intégrité"
+      }
+    ]
+  },
+
+  "securite": {
+    "vault": [
+      {
+        "question": "HashiCorp Vault ?",
+        "reponse": "Gestion secrets et données sensibles"
+      },
+      {
+        "question": "Secrets Vault ?",
+        "reponse": "Mots passe, clés API, certificats stockage sécurisé"
+      },
+      {
+        "question": "Dynamic secrets ?",
+        "reponse": "Secrets générés à la demande, durée vie limitée"
+      },
+      {
+        "question": "Vault tokens ?",
+        "reponse": "Authentification et autorisation accès secrets"
+      },
+      {
+        "question": "Vault policies ?",
+        "reponse": "Contrôle accès basé politiques sécurité"
+      }
+    ],
+
+    "keycloak": [
+      {
+        "question": "Keycloak ?",
+        "reponse": "Gestion identités et accès (IAM) open-source"
+      },
+      {
+        "question": "Single Sign-On ?",
+        "reponse": "Authentification unique multiples applications"
+      },
+      {
+        "question": "OAuth2 Keycloak ?",
+        "reponse": "Authorization framework déléguée"
+      },
+      {
+        "question": "OpenID Connect ?",
+        "reponse": "Couche identification OAuth2"
+      },
+      {
+        "question": "Keycloak realms ?",
+        "reponse": "Isolation logique clients et utilisateurs"
+      }
+    ]
+  },
+
+  "kafka": [
+    {
+      "question": "Apache Kafka ?",
+      "reponse": "Platform streaming événements distribuée"
+    },
+    {
+      "question": "Topic Kafka ?",
+      "reponse": "Flux données catégorie particulière"
+    },
+    {
+      "question": "Partition ?",
+      "reponse": "Division topic pour parallélisation et scalabilité"
+    },
+    {
+      "question": "Producer vs Consumer ?",
+      "reponse": "Producer publie messages, Consumer lit messages"
+    },
+    {
+      "question": "Consumer groups ?",
+      "reponse": "Groupe consumers partage travail traitement messages"
+    }
+  ],
+
+  "aop": [
+    {
+      "question": "AOP définition ?",
+      "reponse": "Aspect-Oriented Programming - modularisation préoccupations transversales"
+    },
+    {
+      "question": "Aspect ?",
+      "reponse": "Module encapsulant comportement transversal"
+    },
+    {
+      "question": "Advice ?",
+      "reponse": "Action exécutée point jointure spécifique"
+    },
+    {
+      "question": "Pointcut ?",
+      "reponse": "Expression définissant points jointure où advice appliqué"
+    },
+    {
+      "question": "Spring AOP vs AspectJ ?",
+      "reponse": "Spring AOP: proxy-based, AspectJ: weaving compile-time/load-time"
+    }
+  ],
+
+  "ioc_di": [
+    {
+      "question": "IoC définition ?",
+      "reponse": "Inversion of Control - inversion contrôle création objets"
+    },
+    {
+      "question": "DI définition ?",
+      "reponse": "Dependency Injection - injection dépendances par conteneur"
+    },
+    {
+      "question": "Types DI ?",
+      "reponse": "Constructor injection, setter injection, field injection"
+    },
+    {
+      "question": "Avantages DI ?",
+      "reponse": "Découplage, testabilité, flexibilité"
+    },
+    {
+      "question": "@Autowired usage ?",
+      "reponse": "Annotation Spring injection dépendances automatique"
+    }
+  ]
+}

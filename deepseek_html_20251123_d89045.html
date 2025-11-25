@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questions d'Entretien Technique Full Stack Complet</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding-top: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem 0;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .tech-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            height: 100%;
+        }
+        
+        .tech-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .tech-card .card-header {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: bold;
+            padding: 15px;
+            display: flex;
+            justify-content: between;
+            align-items: center;
+        }
+        
+        .question-count {
+            background: var(--accent-color);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin-left: auto;
+        }
+        
+        .question-item {
+            border-left: 4px solid var(--secondary-color);
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: white;
+            border-radius: 0 8px 8px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        
+        .question-item.advanced {
+            border-left-color: var(--accent-color);
+        }
+        
+        .question-item.fundamental {
+            border-left-color: var(--success-color);
+        }
+        
+        .question-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+        
+        .badge-advanced {
+            background: var(--accent-color);
+            color: white;
+        }
+        
+        .badge-fundamental {
+            background: var(--success-color);
+            color: white;
+        }
+        
+        .answer-content {
+            background-color: var(--light-color);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        .btn-show-answer {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .btn-show-answer:hover {
+            background-color: var(--primary-color);
+        }
+        
+        .version-badge {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+        
+        .nav-tabs .nav-link {
+            color: var(--dark-color);
+            font-weight: 500;
+            border: none;
+            padding: 12px 20px;
+        }
+        
+        .nav-tabs .nav-link.active {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+        }
+        
+        .search-box {
+            margin-bottom: 20px;
+        }
+        
+        .stats {
+            background-color: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .stats h3 {
+            color: var(--secondary-color);
+            margin: 0;
+        }
+        
+        .footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+            margin-top: 40px;
+            border-radius: 10px 10px 0 0;
+        }
+        
+        .tech-icon {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+        
+        .category-title {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+            margin: 25px 0 15px 0;
+        }
+        
+        .progress {
+            height: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .filter-buttons {
+            margin-bottom: 20px;
+        }
+        
+        .question-level {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--secondary-color);
+        }
+
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- En-tête -->
+        <div class="header text-center">
+            <h1><i class="fas fa-laptop-code me-2"></i>Questions d'Entretien Technique Full Stack</h1>
+            <p class="lead">Plus de 700 questions couvrant toutes les technologies modernes du développement</p>
+            <div class="row mt-4">
+                <div class="col-md-3">
+                    <div class="stats">
+                        <h3 id="java-count">0</h3>
+                        <p>Questions Java</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats">
+                        <h3 id="spring-count">0</h3>
+                        <p>Questions Spring</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats">
+                        <h3 id="cloud-count">0</h3>
+                        <p>Questions Cloud</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats">
+                        <h3 id="devops-count">0</h3>
+                        <p>Questions DevOps</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Barre de recherche et filtres -->
+        <div class="search-box">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" id="search-input" placeholder="Rechercher une question, technologie ou concept...">
+                <button class="btn btn-primary" type="button" id="search-button"><i class="fas fa-search"></i> Rechercher</button>
+            </div>
+            <div class="filter-buttons">
+                <button class="btn btn-outline-primary btn-sm me-2 active" data-filter="all">Toutes</button>
+                <button class="btn btn-outline-success btn-sm me-2" data-filter="fundamental">Fondamentales</button>
+                <button class="btn btn-outline-danger btn-sm me-2" data-filter="advanced">Avancées</button>
+                <button class="btn btn-outline-warning btn-sm" data-filter="version">Spécifiques version</button>
+            </div>
+        </div>
+        
+        <!-- Navigation par technologie -->
+        <ul class="nav nav-tabs mb-4" id="techTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="java-tab" data-bs-toggle="tab" data-bs-target="#java" type="button" role="tab">
+                    <i class="fab fa-java"></i> Java
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="spring-tab" data-bs-toggle="tab" data-bs-target="#spring" type="button" role="tab">
+                    <i class="fas fa-leaf"></i> Spring
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="cloud-tab" data-bs-toggle="tab" data-bs-target="#cloud" type="button" role="tab">
+                    <i class="fas fa-cloud"></i> Cloud & Microservices
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="frontend-tab" data-bs-toggle="tab" data-bs-target="#frontend" type="button" role="tab">
+                    <i class="fas fa-code"></i> Frontend
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="devops-tab" data-bs-toggle="tab" data-bs-target="#devops" type="button" role="tab">
+                    <i class="fas fa-cogs"></i> DevOps
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="patterns-tab" data-bs-toggle="tab" data-bs-target="#patterns" type="button" role="tab">
+                    <i class="fas fa-shapes"></i> Patterns & Architecture
+                </button>
+            </li>
+        </ul>
+        
+        <!-- Zone de chargement -->
+        <div id="loading" class="loading">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Chargement...</span>
+            </div>
+            <p class="mt-2">Chargement des questions...</p>
+        </div>
+
+        <!-- Zone d'erreur -->
+        <div id="error-message" class="error-message" style="display: none;">
+            Erreur lors du chargement des données. Vérifiez que le fichier JSON est présent dans le même répertoire.
+        </div>
+        
+        <!-- Contenu des onglets -->
+        <div class="tab-content" id="techTabsContent">
+            
+            <!-- Onglet Java -->
+            <div class="tab-pane fade show active" id="java" role="tabpanel">
+                <div id="java-content" class="row">
+                    <!-- Le contenu sera généré dynamiquement -->
+                </div>
+            </div>
+            
+            <!-- Onglet Spring -->
+            <div class="tab-pane fade" id="spring" role="tabpanel">
+                <div id="spring-content" class="row">
+                    <!-- Le contenu sera généré dynamiquement -->
+                </div>
+            </div>
+            
+            <!-- Onglet Cloud & Microservices -->
+            <div class="tab-pane fade" id="cloud" role="tabpanel">
+                <div id="cloud-content" class="row">
+                    <!-- Le contenu sera généré dynamiquement -->
+                </div>
+            </div>
+            
+            <!-- Onglet Frontend -->
+            <div class="tab-pane fade" id="frontend" role="tabpanel">
+                <div id="frontend-content" class="row">
+                    <!-- Le contenu sera généré dynamiquement -->
+                </div>
+            </div>
+            
+            <!-- Onglet DevOps -->
+            <div class="tab-pane fade" id="devops" role="tabpanel">
+                <div id="devops-content" class="row">
+                    <!-- Le contenu sera généré dynamiquement -->
+                </div>
+            </div>
+            
+            <!-- Onglet Patterns & Architecture -->
+            <div class="tab-pane fade" id="patterns" role="tabpanel">
+                <div id="patterns-content" class="row">
+                    <!-- Le contenu sera généré dynamiquement -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Pied de page -->
+        <div class="footer text-center">
+            <p>Questions d'Entretien Technique Full Stack - Plus de 700 questions couvrant Java, Spring, Cloud, Microservices, DevOps et plus</p>
+            <p class="mb-0">© 2024 - Préparé pour les entretiens techniques avancés</p>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Configuration des catégories
+        const categories = {
+            'java': {
+                container: 'java-content',
+                sections: ['fondamentaux', 'concurrence', 'collections'],
+                title: 'Java',
+                icon: 'fab fa-java'
+            },
+            'spring': {
+                container: 'spring-content',
+                sections: ['core', 'boot', 'security'],
+                title: 'Spring',
+                icon: 'fas fa-leaf'
+            },
+            'hibernate_jpa': {
+                container: 'spring-content',
+                sections: ['fondamentaux', 'performances'],
+                title: 'Hibernate/JPA',
+                icon: 'fas fa-database'
+            },
+            'angular': {
+                container: 'frontend-content',
+                sections: ['fondamentaux', 'rxjs'],
+                title: 'Angular',
+                icon: 'fab fa-angular'
+            },
+            'react': {
+                container: 'frontend-content',
+                sections: ['reactjs', 'react_ts', 'redux'],
+                title: 'React',
+                icon: 'fab fa-react'
+            },
+            'git': {
+                container: 'devops-content',
+                sections: ['basique', 'avance'],
+                title: 'Git',
+                icon: 'fab fa-git-alt'
+            },
+            'poo': {
+                container: 'patterns-content',
+                sections: ['encapsulation', 'heritage', 'polymorphisme', 'abstraction'],
+                title: 'POO',
+                icon: 'fas fa-cube'
+            },
+            'solid': {
+                container: 'patterns-content',
+                sections: ['srp', 'ocp', 'lsp', 'isp', 'dip'],
+                title: 'SOLID',
+                icon: 'fas fa-shapes'
+            },
+            'patterns_design': {
+                container: 'patterns-content',
+                sections: ['creation', 'structure', 'comportement', 'architecture'],
+                title: 'Design Patterns',
+                icon: 'fas fa-puzzle-piece'
+            },
+            'bdd': {
+                container: 'devops-content',
+                sections: ['oracle', 'postgresql', 'sql_avance'],
+                title: 'Bases de Données',
+                icon: 'fas fa-database'
+            },
+            'docker': {
+                container: 'devops-content',
+                sections: ['conteneurs', 'images'],
+                title: 'Docker',
+                icon: 'fab fa-docker'
+            },
+            'ci_cd': {
+                container: 'devops-content',
+                sections: ['jenkins', 'gitlab_ci'],
+                title: 'CI/CD',
+                icon: 'fas fa-sync-alt'
+            },
+            'dev_reactif': {
+                container: 'spring-content',
+                sections: ['webflux', 'project_reactor', 'r2dbc'],
+                title: 'Développement Réactif',
+                icon: 'fas fa-bolt'
+            },
+            'methodologies': {
+                container: 'patterns-content',
+                sections: ['tdd', 'ddd', 'edd'],
+                title: 'Méthodologies',
+                icon: 'fas fa-vial'
+            },
+            'cloud': {
+                container: 'cloud-content',
+                sections: ['microservices', 'gateway'],
+                title: 'Cloud',
+                icon: 'fas fa-cloud'
+            },
+            'securite': {
+                container: 'cloud-content',
+                sections: ['vault', 'keycloak', 'jwt'],
+                title: 'Sécurité',
+                icon: 'fas fa-shield-alt'
+            },
+            'kafka': {
+                container: 'cloud-content',
+                sections: ['fondamentaux', 'streams'],
+                title: 'Kafka',
+                icon: 'fas fa-stream'
+            },
+            'aop': {
+                container: 'patterns-content',
+                sections: ['concepts', 'spring_aop'],
+                title: 'AOP',
+                icon: 'fas fa-code-branch'
+            },
+            'ioc_di': {
+                container: 'patterns-content',
+                sections: ['concepts', 'spring_ioc'],
+                title: 'IoC/DI',
+                icon: 'fas fa-exchange-alt'
+            }
+        };
+
+        // Variables globales
+        let questionsData = {};
+        let totalQuestions = 0;
+
+        // Charger les données JSON
+        async function loadQuestionsData() {
+            try {
+                const response = await fetch('questions-reponses1.json');
+                if (!response.ok) {
+                    throw new Error('Fichier JSON non trouvé');
+                }
+                questionsData = await response.json();
+                initializeApp();
+            } catch (error) {
+                console.error('Erreur lors du chargement:', error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error-message').style.display = 'block';
+            }
+        }
+
+        // Initialiser l'application après le chargement des données
+        function initializeApp() {
+            document.getElementById('loading').style.display = 'none';
+            
+            // Compter le nombre total de questions
+            Object.keys(questionsData).forEach(category => {
+                Object.keys(questionsData[category]).forEach(subcategory => {
+                    totalQuestions += questionsData[category][subcategory].length;
+                });
+            });
+
+            // Mettre à jour les compteurs
+            updateCounters();
+            
+            // Générer le contenu pour chaque catégorie
+            Object.keys(categories).forEach(category => {
+                generateCategoryContent(category);
+            });
+
+            // Initialiser les événements
+            initializeEvents();
+        }
+
+        // Mettre à jour les compteurs
+        function updateCounters() {
+            const javaCount = countQuestions(['java', 'hibernate_jpa']);
+            const springCount = countQuestions(['spring', 'dev_reactif']);
+            const cloudCount = countQuestions(['cloud', 'securite', 'kafka']);
+            const devopsCount = countQuestions(['docker', 'ci_cd', 'bdd', 'git']);
+
+            document.getElementById('java-count').textContent = javaCount;
+            document.getElementById('spring-count').textContent = springCount;
+            document.getElementById('cloud-count').textContent = cloudCount;
+            document.getElementById('devops-count').textContent = devopsCount;
+        }
+
+        // Compter les questions pour des catégories spécifiques
+        function countQuestions(categoryList) {
+            let count = 0;
+            categoryList.forEach(category => {
+                if (questionsData[category]) {
+                    Object.keys(questionsData[category]).forEach(subcategory => {
+                        count += questionsData[category][subcategory].length;
+                    });
+                }
+            });
+            return count;
+        }
+
+        // Générer le contenu pour une catégorie
+        function generateCategoryContent(category) {
+            const config = categories[category];
+            if (!config || !questionsData[category]) return;
+
+            const container = document.getElementById(config.container);
+            let html = '';
+
+            config.sections.forEach(section => {
+                if (questionsData[category][section]) {
+                    const questions = questionsData[category][section];
+                    const sectionTitle = getSectionTitle(section);
+                    
+                    html += `
+                        <div class="col-md-6">
+                            <div class="card tech-card">
+                                <div class="card-header">
+                                    <i class="${config.icon} tech-icon"></i>
+                                    ${sectionTitle}
+                                    <span class="question-count">${questions.length} questions</span>
+                                </div>
+                                <div class="card-body">
+                    `;
+
+                    questions.forEach((questionObj, index) => {
+                        const isAdvanced = section.includes('avance') || section.includes('advanced') || 
+                                         section.includes('concurrence') || section.includes('performance');
+                        const isFundamental = section.includes('fondamentaux') || section.includes('basique') || 
+                                            section.includes('core') || section.includes('concepts');
+
+                        let badgeClass = '';
+                        if (isAdvanced) badgeClass = 'advanced badge-advanced';
+                        if (isFundamental) badgeClass = 'fundamental badge-fundamental';
+
+                        html += `
+                            <div class="question-item ${isAdvanced ? 'advanced' : ''} ${isFundamental ? 'fundamental' : ''}">
+                                ${badgeClass ? `<span class="question-badge ${badgeClass}">${isAdvanced ? 'Avancé' : 'Fondamental'}</span>` : ''}
+                                <h5>${questionObj.question}</h5>
+                                <button class="btn-show-answer mt-2">Afficher la réponse</button>
+                                <div class="answer-content">
+                                    <p><strong>${questionObj.reponse}</strong></p>
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    html += `
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Obtenir le titre formaté pour une section
+        function getSectionTitle(section) {
+            const titles = {
+                'fondamentaux': 'Fondamentaux',
+                'concurrence': 'Threads & Concurrence',
+                'collections': 'Collections',
+                'core': 'Spring Framework',
+                'boot': 'Spring Boot',
+                'security': 'Spring Security',
+                'performances': 'Performances',
+                'rxjs': 'RxJS & Observables',
+                'reactjs': 'ReactJS',
+                'react_ts': 'React TypeScript',
+                'redux': 'Redux',
+                'basique': 'Git Basique',
+                'avance': 'Git Avancé',
+                'encapsulation': 'Encapsulation',
+                'heritage': 'Héritage',
+                'polymorphisme': 'Polymorphisme',
+                'abstraction': 'Abstraction',
+                'srp': 'Responsabilité Unique',
+                'ocp': 'Ouvert/Fermé',
+                'lsp': 'Substitution Liskov',
+                'isp': 'Ségrégation Interfaces',
+                'dip': 'Inversion Dépendances',
+                'creation': 'Patterns Création',
+                'structure': 'Patterns Structure',
+                'comportement': 'Patterns Comportement',
+                'architecture': 'Architecture',
+                'oracle': 'Oracle DB',
+                'postgresql': 'PostgreSQL',
+                'sql_avance': 'SQL Avancé',
+                'conteneurs': 'Conteneurs Docker',
+                'images': 'Images Docker',
+                'jenkins': 'Jenkins',
+                'gitlab_ci': 'GitLab CI/CD',
+                'webflux': 'WebFlux',
+                'project_reactor': 'Project Reactor',
+                'r2dbc': 'R2DBC',
+                'tdd': 'TDD',
+                'ddd': 'DDD',
+                'edd': 'EDD',
+                'microservices': 'Microservices',
+                'gateway': 'API Gateway',
+                'vault': 'HashiCorp Vault',
+                'keycloak': 'Keycloak',
+                'jwt': 'JWT & Tokens',
+                'streams': 'Kafka Streams',
+                'spring_aop': 'Spring AOP',
+                'spring_ioc': 'Spring IoC'
+            };
+
+            return titles[section] || section.charAt(0).toUpperCase() + section.slice(1);
+        }
+
+        // Initialiser les événements
+        function initializeEvents() {
+            // Fonctionnalité pour afficher/masquer les réponses
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('btn-show-answer')) {
+                    const answerContent = e.target.nextElementSibling;
+                    
+                    if (answerContent.style.display === 'block') {
+                        answerContent.style.display = 'none';
+                        e.target.textContent = 'Afficher la réponse';
+                    } else {
+                        answerContent.style.display = 'block';
+                        e.target.textContent = 'Masquer la réponse';
+                    }
+                }
+            });
+            
+            // Fonctionnalité de recherche
+            const searchInput = document.getElementById('search-input');
+            const searchButton = document.getElementById('search-button');
+            
+            searchButton.addEventListener('click', performSearch);
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+            
+            // Filtres par niveau
+            const filterButtons = document.querySelectorAll('.filter-buttons button');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const filter = this.getAttribute('data-filter');
+                    
+                    // Retirer la classe active de tous les boutons
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    // Ajouter la classe active au bouton cliqué
+                    this.classList.add('active');
+                    
+                    applyFilter(filter);
+                });
+            });
+        }
+
+        // Effectuer la recherche
+        function performSearch() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase().trim();
+            if (!searchTerm) return;
+
+            const questions = document.querySelectorAll('.question-item h5');
+            let foundCount = 0;
+
+            questions.forEach(question => {
+                const questionText = question.textContent.toLowerCase();
+                const questionItem = question.closest('.question-item');
+                
+                if (questionText.includes(searchTerm)) {
+                    questionItem.style.display = 'block';
+                    foundCount++;
+                    // Mettre en évidence le terme recherché
+                    const regex = new RegExp(searchTerm, 'gi');
+                    question.innerHTML = question.textContent.replace(regex, match => `<mark>${match}</mark>`);
+                } else {
+                    questionItem.style.display = 'none';
+                }
+            });
+
+            // Afficher le nombre de résultats
+            if (searchTerm) {
+                showSearchResults(foundCount);
+            }
+        }
+
+        // Afficher les résultats de recherche
+        function showSearchResults(count) {
+            let existingAlert = document.querySelector('.search-results-alert');
+            if (existingAlert) {
+                existingAlert.remove();
+            }
+
+            const alert = document.createElement('div');
+            alert.className = `alert ${count > 0 ? 'alert-info' : 'alert-warning'} search-results-alert mt-3`;
+            alert.innerHTML = `
+                <strong>${count}</strong> question(s) trouvée(s) pour votre recherche.
+                ${count === 0 ? '<button class="btn btn-sm btn-outline-warning ms-2" id="reset-search">Afficher toutes les questions</button>' : ''}
+            `;
+
+            document.querySelector('.search-box').after(alert);
+
+            if (count === 0) {
+                document.getElementById('reset-search').addEventListener('click', resetSearch);
+            }
+        }
+
+        // Réinitialiser la recherche
+        function resetSearch() {
+            document.getElementById('search-input').value = '';
+            const questions = document.querySelectorAll('.question-item');
+            questions.forEach(question => {
+                question.style.display = 'block';
+                // Retirer le marquage
+                const questionTitle = question.querySelector('h5');
+                questionTitle.innerHTML = questionTitle.textContent;
+            });
+            
+            document.querySelector('.search-results-alert')?.remove();
+        }
+
+        // Appliquer les filtres
+        function applyFilter(filter) {
+            const allQuestions = document.querySelectorAll('.question-item');
+            
+            allQuestions.forEach(question => {
+                if (filter === 'all') {
+                    question.style.display = 'block';
+                } else if (filter === 'fundamental') {
+                    question.style.display = question.classList.contains('fundamental') ? 'block' : 'none';
+                } else if (filter === 'advanced') {
+                    question.style.display = question.classList.contains('advanced') ? 'block' : 'none';
+                } else if (filter === 'version') {
+                    // Logique pour les questions spécifiques aux versions
+                    const card = question.closest('.tech-card');
+                    const header = card.querySelector('.card-header');
+                    if (header.textContent.includes('Java 8') || header.textContent.includes('Java 11+') || 
+                        header.textContent.includes('Angular') || header.textContent.includes('React')) {
+                        question.style.display = 'block';
+                    } else {
+                        question.style.display = 'none';
+                    }
+                }
+            });
+        }
+
+        // Démarrer le chargement des données
+        loadQuestionsData();
+    </script>
+</body>
+</html>
