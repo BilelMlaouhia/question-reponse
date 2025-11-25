@@ -1,0 +1,104 @@
+QU'EST-CE QUE LA MÉMOIRE HEAP ET STACK ?
+Heap = Stockage objets long terme, allocation dynamique, partagée entre threads
+Stack = Mémoire méthode court terme, accès LIFO rapide, spécifique au thread
+Super court: Heap = Stockage objets, Stack = Exécution méthodes
+
+COMMENT FONCTIONNE LE GARBAGE COLLECTOR EN JAVA ET QUELS SONT SES TYPES ?
+Fonctionne: Trouve objets morts → Supprime → Libère mémoire
+Types: Serial GC, Parallel GC, CMS, G1 GC (défaut), ZGC, Shenandoah
+Super court: Supprime objets inutilisés automatiquement
+
+QU'EST-CE QUE LA COMPILATION JIT ?
+Compilation Juste-à-Temps convertit bytecode en code natif au runtime
+Super court: Bytecode → Code machine pour exécution plus rapide
+
+ARRAYLIST VS LINKEDLIST ?
+ArrayList: Accès rapide O(1), insertion lente
+LinkedList: Accès lent O(n), insertion rapide O(1)
+Super court: ArrayList = lecture rapide, LinkedList = insertion rapide
+
+QU'EST-CE QUE LE POLYMORPHISME ?
+Même méthode, comportements différents
+Super court: Une interface, multiples implémentations
+Exemple: Animal.speak() → Chien "Woof", Chat "Meow"
+
+CLASSE ABSTRAITE VS INTERFACE ?
+Classe abstraite: Constructeurs, héritage simple, implémentation partielle
+Interface: Pas constructeurs, héritage multiple, que signatures méthodes
+Super court: Abstraite = "est-un", Interface = "peut-faire"
+
+DÉFINITION DES EXCEPTIONS ET LEURS TYPES ?
+Exceptions: Erreurs qui perturbent le flux normal du programme
+Types: Checked (doit être gérée), Unchecked (runtime), Error (système)
+Super court: Checked = forcée à gérer, Unchecked = surprises runtime
+
+RÔLE DU MOT-CLÉ SYNCHRONIZED ?
+Permet un seul thread à la fois
+Super court: Évite l'accès simultané au même code/méthode
+
+QU'EST-CE QUE LA RÉFLEXION ?
+Inspecter/modifier les classes au runtime
+Super court: Code qui s'examine/se modifie en cours d'exécution
+
+LES GÉNÉRIQUES EN JAVA ?
+Sécurité de type à la compilation
+Super court: Écrire code une fois, utiliser avec différents types
+Exemple: List<String> au lieu de List + casting
+
+QU'EST-CE QU'UN ENUM ?
+Ensemble fixe de constantes nommées
+Super court: Liste prédéfinie de valeurs
+Exemple: enum Couleur { ROUGE, VERT, BLEU }
+
+== VS EQUALS() ?
+== compare références (adresse mémoire)
+equals() compare contenu/valeurs
+Super court: == = même objet, equals() = même valeur
+Exemple String: 
+String a = "hello"; String b = "hello";
+a == b; // ❌ Ne pas faire
+a.equals(b); // ✅ Faire ceci
+
+COMMENT IMPLÉMENTER UN SINGLETON ?
+Constructeur privé + méthode statique getInstance()
+Super court:
+public class Singleton {
+    private static Singleton instance;
+    private Singleton() {}
+    public static Singleton getInstance() {
+        if (instance == null) instance = new Singleton();
+        return instance;
+    }
+}
+
+COMMENT CRÉER UN OBJET IMMUTABLE ?
+Classe finale + champs finaux + pas de setters
+Super court: Final class + final fields + pas setters = immuable
+
+PATTERN BUILDER ?
+Construction étape par étape d'objets complexes
+Super court:
+Personne personne = new Personne.Builder()
+    .nom("Jean")
+    .age(30)
+    .build();
+
+POURQUOI UTILISER OPTIONAL ?
+Conteneur qui peut contenir ou non une valeur
+Super court: Évite NullPointerException, gère explicitement l'absence
+
+NOUVEAUTÉS DE JAVA 8 ?
+Lambdas: (a, b) -> a + b
+Stream API: list.stream().filter().map()
+Optional: Plus de NullPointerException
+Méthodes défaut dans interfaces
+Références méthodes: String::length
+Super court: Programmation fonctionnelle + streams + optional
+
+COMPLETABLEFUTURE ?
+Programmation asynchrone avec chaînage
+Super court: Opérations non-bloquantes combinables
+Exemple:
+CompletableFuture.supplyAsync(() -> getData())
+    .thenApply(data -> process(data))
+    .thenAccept(result -> use(result));
