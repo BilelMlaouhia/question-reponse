@@ -1,0 +1,121 @@
+Les questions POO:
+
+1. Encapsulation
+Cacher les données internes
+
+Exposer via méthodes (getters/setters)
+
+2. Héritage
+    - Étendre une classe existante
+    - Réutiliser le code parent
+
+3. Polymorphisme
+    - Même méthode, comportements différents
+    - Surcharge 
+    - redéfinition
+
+4. Abstraction: 
+    - Cacher la complexité
+    - Interfaces object est un  
+    - classes abstraites
+
+Les questions Atomic:
+
+* Variables thread-safe sans verrous pour opérations simples.
+
+    AtomicBoolean flag = new AtomicBoolean(true);
+    AtomicReference<String> ref = new AtomicReference<>("hello");
+
+Les questions Générales de Java:
+
+IMMUTABLE (Immuable)
+- NE PEUT PAS être modifié après création
+- Nouvel objet créé pour chaque modification
+- Thread-safe par défaut
+
+String s = "hello";
+s = s.concat(" world"); // Crée un NOUVEL objet
+
+Integer x = 5;
+x = x + 1; // Nouvel Integer
+
+MUTABLE (Modifiable) -> call constructor
+- PEUT être modifié après création
+- Même objet modifié
+- Synchronisation nécessaire pour thread-safe
+
+StringBuilder sb = new StringBuilder("hello");
+sb.append(" world"); // Modifie le MÊME objet
+
+List<String> list = new ArrayList<>();
+list.add("element"); // Modifie la même liste
+
+les questions Heap vs Stack:
+
+* Stack(LIFO) : rapide, var et methodes, court term, et limité.
+* Heap: objet et instance, long terme, lent, large, géré par le garbage collector 
+
+
+Les questions de GarbageCollector:
+
+* Supprime automatiquement les objets non utilisés et Libère la mémoire.
+a types comme Serial GC, Parallel GC,  CMS,  G1 GC,  ZGC.
+
+Les questions des principes SOLID:
+
+* S-Single Responsibility (Responsabilité Unique)
+   Une classe = une seule raison de changer.
+
+* O - Open/Closed (Ouvert/Fermé)
+   Ouvert à l'extension, fermé à la modification.
+
+* I - Interface Segregation (Ségrégation d'interface)
+   Interfaces spécifiques plutôt qu'une interface générale.
+
+* L - Liskov Substitution (Substitution de Liskov)
+   Les sous-classes doivent pouvoir remplacer les classes mères.
+
+* D - Dependency Inversion (Inversion de dépendance)
+   Dépendre des abstractions, pas des implémentations.
+
+
+
+Les questions Exceptions types:
+
+* Checked Exceptions (Vérifiées)
+  - Obligatoire : Doivent être gérées (try-catch ou throws)
+  - Compilation : Détectées à la compilation
+  - Héritent de : Exception mais PAS de RuntimeException
+
+* Unchecked Exceptions (Non-vérifiées)
+  - Optionnel : Pas obligatoire de les gérer
+  - Runtime : Se produisent à l'exécution
+  - Héritent de : RuntimeException
+
+* Errors (Erreurs)
+  - Système : Problèmes graves de la JVM
+  - Irécupérable : Ne doivent pas être attrapées
+  - Héritent de : Error
+
+
+
+Les nouveauté de Java 8:
+
+- Interface fonctionnelle
+- Méthodes Default / Static dans les interfaces
+- API Stream → opérations chaînées
+- Optional
+- Lambda → fonctions anonymes
+- java.time (nouvelle API date/heure)
+- Orinté Aspect POA (AOP)
+
+Les types des interfaces en Java 8
+
+on distingue plusieurs types d’interfaces.
+
+Dans le cadre de l’API Stream, on utilise principalement quatre interfaces fonctionnelles standard :
+
+- Predicate : permet de tester une condition et retourne un booléen.
+- Consumer : permet de consommer des données sans rien retourner.
+- Supplier : permet de fournir ou générer une valeur sans prendre de paramètre.
+- Function : permet de transformer un type en un autre.
