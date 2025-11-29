@@ -19,12 +19,16 @@ Exposer via méthodes (getters/setters)
     - Interfaces object est un  
     - classes abstraites
 
+-------------------------------------------------------------------------------
+
 Les questions Atomic:
 
 * Variables thread-safe sans verrous pour opérations simples.
 
     AtomicBoolean flag = new AtomicBoolean(true);
     AtomicReference<String> ref = new AtomicReference<>("hello");
+
+-------------------------------------------------------------------------------
 
 Les questions Générales de Java:
 
@@ -55,11 +59,14 @@ les questions Heap vs Stack:
 * Stack(LIFO) : rapide, var et methodes, court term, et limité.
 * Heap: objet et instance, long terme, lent, large, géré par le garbage collector 
 
+-------------------------------------------------------------------------------
 
 Les questions de GarbageCollector:
 
 * Supprime automatiquement les objets non utilisés et Libère la mémoire.
 a types comme Serial GC, Parallel GC,  CMS,  G1 GC,  ZGC.
+
+-------------------------------------------------------------------------------
 
 Les questions des principes SOLID:
 
@@ -78,7 +85,7 @@ Les questions des principes SOLID:
 * D - Dependency Inversion (Inversion de dépendance)
    Dépendre des abstractions, pas des implémentations.
 
-
+-------------------------------------------------------------------------------
 
 Les questions Exceptions types:
 
@@ -97,7 +104,7 @@ Les questions Exceptions types:
   - Irécupérable : Ne doivent pas être attrapées
   - Héritent de : Error
 
-
+-------------------------------------------------------------------------------
 
 Les nouveauté de Java 8:
 
@@ -119,3 +126,409 @@ Dans le cadre de l’API Stream, on utilise principalement quatre interfaces fon
 - Consumer : permet de consommer des données sans rien retourner.
 - Supplier : permet de fournir ou générer une valeur sans prendre de paramètre.
 - Function : permet de transformer un type en un autre.
+
+-------------------------------------------------------------------------------
+
+*Quels sont les nouveautés dans Java 11:
+
+- Java 11 est une LTS très adoptée
+- HTTP Client moderne et asynchrone
+- Productivité améliorée avec var et méthodes pratiques
+- Simplification du développement avec l'exécution directe
+- var introduit en Java 10 mais popularisé en Java 11 (LTS): : Permet de déclarer des variables locales sans préciser le type explicitement.
+
+1. HTTP Client API - Remplace HttpURLConnection:
+HttpClient client = HttpClient.newHttpClient();
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://api.example.com"))
+    .build();
+
+2. var en lambdas - Inférence de type étendue:
+var list = List.of("a", "b", "c");
+var stream = list.stream();
+
+3. Lancement direct .java sans compilation:
+java Main.java  # exécute directement
+
+4. Nouvelles méthodes String:
+"  hello  ".strip();      // "hello"
+"".isBlank();             // true
+"line1\nline2".lines();   // Stream
+"Java".repeat(3);         // "JavaJavaJava"
+
+5. Files.readString()/writeString():
+String content = Files.readString(Path.of("file.txt"));
+Files.writeString(Path.of("output.txt"), "content");
+
+-------------------------------------------------------------------------------
+
+*Quels sont les nouveautés dans Java 17:
+
+- Java 17 est une LTS (Long Term Support)
+- Records remplacent les classes POJO verbeuses
+- Sealed classes permettent un modèle de domaine plus sûr
+- Pattern matching simplifie le code
+- Ces features encouragent la programmation immutable et déclarative
+- Switch expressions en préview Java 14 mais finalisé Java 17: return retourne depuis la méthode entière yield retourne seulement depuis le switch expression:
+Règle simple :
+Sans { } → pas de yield nécessaire
+Avec { } → obligation d'utiliser yield
+
+yield → finit le switch → méthode continue
+return → finit la méthode → tout s'arrête
+
+1. Sealed Classes - Contrôle l'héritage:
+public sealed class Shape permits Circle, Rectangle, Triangle { }
+
+2. Records - Classes immuables pour données:
+public record Person(String name, int age) { }
+// Génère automatiquement : constructeur, getters, equals, hashCode, toString
+
+3. Pattern Matching for instanceof:
+if (obj instanceof String s) {
+    System.out.println(s.length()); // 's' est directement utilisable
+}
+
+4. Switch Expressions (finalisé):
+return switch (day) {
+    case MONDAY, FRIDAY -> "weekend";
+    case TUESDAY -> "weekday";
+    default -> "unknown";
+};
+
+5. Text Blocks (finalisé):
+String json = """
+    {
+        "name": "John",
+        "age": 30
+    }
+    """;
+
+6. Classes sealed + Records combinés:
+sealed interface Expr 
+    permits ConstantExpr, PlusExpr, TimesExpr { }
+
+record ConstantExpr(int i) implements Expr { }
+record PlusExpr(Expr a, Expr b) implements Expr { }
+
+-------------------------------------------------------------------------------
+
+*Quels sont les nouveautés dans Java 21:
+
+C'est la version qui modernise le plus Java depuis Java 8, surtout pour la programmation concurrente.
+
+- Java 21 est la dernière LTS
+- Virtual threads révolutionnent la concurrence (alternative aux Reactive Programming)
+- Pattern matching mature et complet
+- Records deviennent encore plus puissants avec les record patterns
+- Focus sur l'écriture de code plus lisible et moins verbeux
+- Performance améliorée avec les virtual threads
+
+1. Virtual Threads (Project Loom) - Concurrence massive:
+Thread.startVirtualThread(() -> {
+    // Tâche légère - milliers de threads possibles
+});
+
+2. Pattern Matching for Switch (finalisé):
+String message = switch (obj) {
+    case Integer i -> "Nombre: " + i;
+    case String s && !s.isEmpty() -> "Chaîne: " + s;
+    case null -> "Null détecté";
+    default -> "Inconnu";
+};
+
+3. Record Patterns - Déstructuration des records:
+if (person instanceof Person(String name, int age)) {
+    System.out.println(name + " a " + age + " ans");
+}
+
+4. Sequenced Collections - Nouvelle API pour collections ordonnées:
+list.addFirst("premier");
+list.addLast("dernier");
+String first = list.getFirst();
+String last = list.getLast();
+
+5. String Templates (préview) - Interpolation de chaînes:
+String name = "Jean";
+String message = STR."Bonjour \{name}!"; // "Bonjour Jean!"
+
+6. Structured Concurrency (préview) - Gestion des tâches liées:
+try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+    Future<String> user = scope.fork(() -> findUser());
+    Future<Integer> order = scope.fork(() -> fetchOrder());
+    
+    scope.join();
+    return new Response(user.resultNow(), order.resultNow());
+}
+
+-------------------------------------------------------------------------------
+
+Les questions de Spring Framework:
+Framework Java pour applications d'entreprise qui gére les dépendances et fait l'inversion de contrôle (IoC)
+
+1. C'est quoi Spring?
+   - Framework Java pour applications d'entreprise
+   - Gestion des dépendances et inversion de contrôle (IoC)
+
+2. Pourquoi utiliser Spring?
+   - Découplage des composants
+   - Facilite les tests (injection de dépendances)
+   - Réduit le code boilerplate
+
+3. Configuration de Spring
+   - Ancien : Fichier XML (applicationContext.xml)
+   - Moderne : Configuration Java avec @Configuration
+
+@Configuration
+@ComponentScan
+public class AppConfig { }
+
+4. Core Spring Concepts
+   - IoC Container : Gère le cycle de vie des objets
+   - DI (Dependency Injection) : Injection des dépendances
+   - Beans : Objets gérés par Spring
+
+5. Injection de Dépendances
+   - Par constructeur (recommandé)
+   - Par setter
+   - Par champ (avec @Autowired)
+
+6. Annotations Principales
+   - @Component - Classe comme bean Spring
+   - @Autowired - Injection automatique
+   - @Service, @Repository - Spécialisations
+
+7. Spring vs Spring Boot
+   - Spring : Configuration manuelle
+   - Spring Boot : Auto-configuration, embedded server
+
+-------------------------------------------------------------------------------
+
+Les questions de SpringBoot Framework:
+
+1. C'est quoi Spring Boot?
+  - Spring Boot est un framework basé sur Spring Framework
+  - Spring Boot = Spring Framework + Couche application
+  - Extension de Spring pour créer des applications autonomes
+  - réduit la configuration manuelle
+
+2. Pourquoi utiliser Spring Boot?
+  - Démarrage rapide - temps de développement réduit
+  - Serveurs embarqués (Tomcat, Jetty) - pas de déploiement externe
+  - Auto-configuration intelligente
+
+3. Comment configurer Spring Boot?
+@SpringBootApplication
+public class Application {
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
+}
+
+4. Fichiers de configuration
+application.properties ou application.yml
+
+5. Avantages clés
+   - Starters : dépendances pré-configurées (spring-boot-starter-web)
+   - Actuator : monitoring et métriques
+   - Profils : configurations par environnement
+
+6. Spring Boot vs Spring
+   - Spring : Configuration manuelle, XML/Java config
+   - Spring Boot : Auto-configuration, prêt à l'emploi
+
+7. Comment démarrer un projet?
+   - Spring Initializr (start.spring.io)
+   - IDE (Spring Tool Suite)
+   - CLI avec Maven/Gradle
+
+
+-------------------------------------------------------------------------------
+
+Les questions de cycle de vie Spring et SpringBoot:
+
+Spring Bean Lifecycle
+
+ 1- Instantiation - Création du bean
+ 2- Population des propriétés - Injection des dépendances
+ 3- BeanNameAware - Set le nom du bean
+ 4- BeanFactoryAware - Set la BeanFactory
+ 5- PostConstruct - @PostConstruct (initialisation)
+ 6- InitializingBean - afterPropertiesSet()
+ 7- Bean prêt - Utilisable
+ 8- PreDestroy - @PreDestroy (nettoyage)
+ 9- Destruction - destroy()
+
+Spring Boot Application Lifecycle
+
+ 1- Démarrage JVM - Lancement de l'application
+ 2- SpringApplication.run() - Point d'entrée
+ 3- Chargement configuration - application.properties
+ 4- Auto-configuration - Configuration automatique
+ 5- Démarrage serveur embarqué (Tomcat)
+ 6- Application prête - Port 8080 actif
+ 7- Arrêt graceful - Fermeture propre
+
+* Différences :
+
+- Spring : Cycle de vie des beans
+- Spring Boot : Cycle de vie de l'application complète
+- Spring Boot utilise le même cycle de vie des beans Spring
+- Spring Boot ajoute une couche supplémentaire pour l'application
+
+Bean instantiation → DI → @PostConstruct → Utilisation → @PreDestroy
+
+// Spring Boot : Cycle de vie de l'APPLICATION  
+Start → Auto-configuration → Spring Context creation → Bean lifecycle → Server start → Shutdown
+
+-------------------------------------------------------------------------------
+
+Les questions de SpringData et Hibernate:
+Spring Data JPA
+
+1. C'est quoi Spring Data JPA?
+  - Abstraction au-dessus de JPA/Hibernate
+  - Réduit le code boilerplate des repositories
+
+2. Comment ça marche?
+public interface UserRepository extends JpaRepository<User, Long> {
+    // Implémentation automatique
+    List<User> findByName(String name);
+    User findByEmail(String email);
+}
+
+3. Avantages principaux
+   - Méthodes auto-implémentées par convention de nommage
+   - Requêtes dérivées sans écrire SQL
+   - Pagination et tri natifs
+   - Hibernate
+
+1. C'est quoi Hibernate?
+   - ORM (Object-Relational Mapping)
+   - Map objets Java ↔ tables base de données
+
+2. Concepts clés
+   - SessionFactory - Point d'entrée principal
+   - Session - Contexte de persistance
+   - Entity - @Entity, @Table, @Column
+
+3. Relations
+@OneToMany, @ManyToOne, @ManyToMany
+
+  - Spring Data + Hibernate
+  - Spring Data JPA utilise Hibernate comme implémentation par défaut
+  - Spring Data gère les repositories, Hibernate gère le mapping ORM
+
+Spring Data = Simplification, Hibernate = Puissance ORM
+
+
+-------------------------------------------------------------------------------
+
+Les questions de Reactive Dev:
+
+Reactive Programming
+   - Programmation asynchrone et non-bloquante
+   - Flux de données réactifs (Mono, Flux)
+Ex: Spring WebFlux vs Spring MVC traditionnel
+
+DDD (Domain Driven Design)
+  - Conception centrée métier
+  - Ubiquitous Language - langage commun devs/experts métier
+  - Entities, Value Objects, Aggregates - modélisation domaine
+
+TDD (Test Driven Development)
+  - Développement piloté par les tests
+  - Processus : Red → Green → Refactor
+  - Écriture des tests AVANT le code
+
+EDD (Event Driven Design)
+  - Architecture basée événements
+  - Producteurs/Consommateurs d'événements
+  - Découplage fort entre services
+
+BDD (Behavior Driven Development)
+  - TDD + Langage naturel (Gherkin)
+  - Given-When-Then pour décrire les comportements
+  - Focus sur le comportement utilisateur
+
+
+Reactive → Performance applications async
+DDD → Modélisation métier précise
+TDD → Qualité code via tests premiers
+EDD → Architecture événementielle découplée
+BDD → Collaboration équipes via langage commun
+
+
+-------------------------------------------------------------------------------
+
+Les questions de Architecture:
+
+Architecture Monolithique
+  - Une seule application contenant tout
+  - Utilisation : Petites applications, début de projet + Simple à développer/déployer
+  - Difficile de scaler
+
+Architecture N-Tiers
+  - Couches séparées : Présentation → Métier → Données
+  - Utilisation : Applications d'entreprise classiques + Séparation des concerns
+  - Couplage entre layers
+
+Architecture MVC
+  - Modèle-Vue-Contrôleur pour applications web
+  - Utilisation : Applications web interactives + Organisation claire, réutilisable
+  - Peut devenir complexe
+
+Architecture Microservices
+  - Applications décomposées en services indépendants
+  - Utilisation : Grosses applications, équipes multiples + Scalabilité, déploiement indépendant
+  - Complexité distribuée
+
+* Quand utiliser :
+
+  - Startup → Monolithique
+  - Application moyenne → N-Tiers/MVC
+  - Grosse entreprise → Microservices
+  - Web classique → MVC
+  - API/Cloud → Microservices
+
+-------------------------------------------------------------------------------
+
+Les questions de DI, IoC:
+
+IoC (Inversion of Control)
+
+1. C'est quoi IoC?
+  - Contrôle inversé : le framework gère le cycle de vie des objets
+  - Au lieu de : new MaClass() → c'est Spring qui crée les instances
+
+2. Principe
+  - Avant : Vous contrôliez la création des objets
+  - Avec Spring : Spring contrôle la création
+
+DI (Dependency Injection)
+
+1. C'est quoi DI?
+  - Implémentation concrète de l'IoC
+  - Injection des dépendances dans les classes
+
+2. Méthodes d'injection
+
+    1- Par constructeur (RECOMMANDÉ)
+    2- Par setter
+    3- Par champ (DÉCONSEILLÉ) @Autowired
+
+3. Avantages
+  - Découplage des classes
+  - Testabilité facilitée
+  - Maintenance simplifiée
+
+IoC + DI = Spring gère les objets et leurs dépendances
+
+-------------------------------------------------------------------------------
+
+
+
+
+
+
+
