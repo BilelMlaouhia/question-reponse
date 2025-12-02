@@ -76,13 +76,13 @@ Les questions des principes SOLID:
 * O - Open/Closed (Ouvert/Fermé)
    Ouvert à l'extension, fermé à la modification.
 
-* I - Interface Segregation (Ségrégation d'interface)
-   Interfaces spécifiques plutôt qu'une interface générale.
-
-* L - Liskov Substitution (Substitution de Liskov)
+* L - Liskov Substitution (Substitution de Liskov) child replace parent
    Les sous-classes doivent pouvoir remplacer les classes mères.
 
-* D - Dependency Inversion (Inversion de dépendance)
+* I - Interface Segregation (Ségrégation d'interface) specific interface
+   Interfaces spécifiques plutôt qu'une interface générale.
+
+* D - Dependency Inversion (Inversion de dépendance) abstraction/couplage faible
    Dépendre des abstractions, pas des implémentations.
 
 -------------------------------------------------------------------------------
@@ -134,7 +134,7 @@ Dans le cadre de l’API Stream, on utilise principalement quatre interfaces fon
 - Java 11 est une LTS très adoptée
 - HTTP Client moderne et asynchrone
 - Productivité améliorée avec var et méthodes pratiques
-- Simplification du développement avec l'exécution directe
+- Simplification du développement avec l'exécution directe java Main.java 
 - var introduit en Java 10 mais popularisé en Java 11 (LTS): : Permet de déclarer des variables locales sans préciser le type explicitement.
 
 1. HTTP Client API - Remplace HttpURLConnection:
@@ -205,8 +205,7 @@ String json = """
     """;
 
 6. Classes sealed + Records combinés:
-sealed interface Expr 
-    permits ConstantExpr, PlusExpr, TimesExpr { }
+sealed interface Expr permits ConstantExpr, PlusExpr, TimesExpr { }
 
 record ConstantExpr(int i) implements Expr { }
 record PlusExpr(Expr a, Expr b) implements Expr { }
@@ -216,6 +215,11 @@ record PlusExpr(Expr a, Expr b) implements Expr { }
 *Quels sont les nouveautés dans Java 21:
 
 C'est la version qui modernise le plus Java depuis Java 8, surtout pour la programmation concurrente.
+
+* Key diff:
+
+   - Reactive = non-blocking + backpressure.
+   - Java 21 concurrency = simple blocking code but cheap virtual threads.
 
 - Java 21 est la dernière LTS
 - Virtual threads révolutionnent la concurrence (alternative aux Reactive Programming)
@@ -264,7 +268,6 @@ try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
 -------------------------------------------------------------------------------
 
 Les questions de Spring Framework:
-Framework Java pour applications d'entreprise qui gére les dépendances et fait l'inversion de contrôle (IoC)
 
 1. C'est quoi Spring?
    - Framework Java pour applications d'entreprise
@@ -273,7 +276,7 @@ Framework Java pour applications d'entreprise qui gére les dépendances et fait
 2. Pourquoi utiliser Spring?
    - Découplage des composants
    - Facilite les tests (injection de dépendances)
-   - Réduit le code boilerplate
+   - Réduit le code 
 
 3. Configuration de Spring
    - Ancien : Fichier XML (applicationContext.xml)
@@ -294,9 +297,9 @@ public class AppConfig { }
    - Par champ (avec @Autowired)
 
 6. Annotations Principales
-   - @Component - Classe comme bean Spring
+   - @Component, @Bean - Classe comme bean Spring
    - @Autowired - Injection automatique
-   - @Service, @Repository - Spécialisations
+   - @Service, @Configuration - Spécialisations
 
 7. Spring vs Spring Boot
    - Spring : Configuration manuelle
@@ -388,7 +391,7 @@ Spring Data JPA
 
 1. C'est quoi Spring Data JPA?
   - Abstraction au-dessus de JPA/Hibernate
-  - Réduit le code boilerplate des repositories
+  - Réduit le code des repositories
 
 2. Comment ça marche?
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -413,7 +416,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
    - Entity - @Entity, @Table, @Column
 
 3. Relations
-@OneToMany, @ManyToOne, @ManyToMany
+@OneToMany, @ManyToOne, @ManyToMany, @OneToOne
 
   - Spring Data + Hibernate
   - Spring Data JPA utilise Hibernate comme implémentation par défaut
@@ -425,6 +428,12 @@ Spring Data = Simplification, Hibernate = Puissance ORM
 -------------------------------------------------------------------------------
 
 Les questions de Reactive Dev:
+
+*Achitecture hexagonale (ports & adapters) :
+  - Domaine au centre : logique métier pure, sans dépendances techniques.
+  - Ports : interfaces qui décrivent ce que le domaine attend (entrants) ou expose (sortants).
+  - Adapters : implémentations concrètes des ports (REST, DB, MQ…).
+  - But : rendre le métier indépendant du framework, de la base de données ou de l’I/O.
 
 Reactive Programming
    - Programmation asynchrone et non-bloquante
@@ -526,9 +535,71 @@ IoC + DI = Spring gère les objets et leurs dépendances
 
 -------------------------------------------------------------------------------
 
+LDAP
+→ Protocole pour stocker et récupérer des users (annuaire). Pas un protocole d’auth moderne.
+→ Sert souvent pour authentifier via un annuaire interne.
 
+OAuth
+→ Protocole d’autorisation. Donne accès à une ressource sans partager le mot de passe.
+→ Ancienne version (désuète, remplacée par OAuth2).
 
+OAuth2
+→ Standard actuel d’autorisation (tokens, scopes, clients).
+→ Utilisé par Keycloak, Google, GitHub, etc.
 
+SAML
+→ XML + enterprise. Sert pour SSO entre entreprises.
+→ Utilisé beaucoup dans les environnements corporates (ADFS, Azure AD).
 
+Résumé :
+LDAP = annuaire, OAuth2 = autorisation moderne, SAML = SSO enterprise, OAuth (1.0) = ancien.
+
+-------------------------------------------------------------------------------
+
+Spring Batch (bref)
+Framework pour exécuter des traitements batch fiables et planifiés :
+
+   - Job = un traitement complet.
+   - Step = une étape du job.
+   - Reader → Processor → Writer pour lire, transformer, écrire.
+   - Gère retry, skip, transaction, parallélisation, restart après crash.
+
+En résumé : idéal pour les imports, exports, traitements lourds et jobs récurrents.
+
+-------------------------------------------------------------------------------
+
+Spring Cloud
+→ Ensemble d’outils pour les microservices :
+
+Config Server
+   - Eureka/Consul (discovery)
+   - Gateway
+   - Circuit breaker (Resilience4j)
+   - Load balancing
+   - Distributed tracing (Sleuth)
+
+En résumé : facilite la communication, config, sécurité, résilience entre microservices.
+
+* Spring WebFlux Framework reactif pour créer des APIs non-bloquantes :
+     Reactor (Mono, Flux) librairie réactive de Spring:
+
+    - Mono<T> : émet 0 ou 1 élément (équivalent d'un Optional async).
+    - Flux<T> : émet 0, 1 ou plusieurs éléments (un stream async).
+
+* Points clés :
+
+  - Non bloquant
+  - Asynchrone
+  - Backpressure (contrôle du flux)
+  - Utilisé par WebFlux pour les APIs réactives.
+  - Haute performance / scalable
+  - Gère beaucoup de connexions avec peu de threads
+  - Alternative à Spring MVC (bloquant)
+
+Diff très courte :
+  - Spring Cloud = architecture & outils microservices.
+  - WebFlux = façon de faire des APIs reactives et non bloquantes.
+
+-------------------------------------------------------------------------------
 
 
