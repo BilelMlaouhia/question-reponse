@@ -455,7 +455,7 @@ EDD (Event Driven Design)
   - Producteurs/Consommateurs d'événements
   - Découplage fort entre services
 
-BDD (Behavior Driven Development)
+BDD (Behavior Driven Development) Given-When-Then
   - TDD + Langage naturel (Gherkin)
   - Given-When-Then pour décrire les comportements
   - Focus sur le comportement utilisateur
@@ -601,5 +601,146 @@ Diff très courte :
   - WebFlux = façon de faire des APIs reactives et non bloquantes.
 
 -------------------------------------------------------------------------------
+
+les stages CICD en details
+
+CI = Continuous Integration (Intégration Continue)
+CD = Continuous Delivery / Continuous Deployment (Livraison / Déploiement Continu)
+
+1. Continuous Integration (CI)
+
+* But : Intégrer régulièrement le code dans un dépôt partagé.
+   - Chaque commit déclenche automatiquement une build. ( SCM, Webhook)
+   - Exécution de tests unitaires / tests d’intégration.
+   - Détection rapide des bugs et conflits.
+
+* Outils courants : Jenkins, GitLab CI, GitHub Actions, CircleCI, TravisCI.
+
+2. Continuous Delivery (CD)
+
+* But : Préparer le code pour un déploiement en production à tout moment.
+
+  - Après CI, le code passe par des étapes d’automatisation des tests (tests fonctionnels, QA, sécurité).
+  - Génération d’un package prêt pour la production.
+  - Déploiement manuel possible en production.
+
+* Outils : Jenkins, GitLab CI/CD, ArgoCD, Spinnaker.
+
+3. Continuous Deployment (CD)
+
+But : Déployer automatiquement chaque modification validée en production.
+
+Différence avec Delivery : pas de validation manuelle, tout passe automatiquement en prod si les tests passent.
+
+4. Bonnes pratiques CI/CD
+
+   - Commits fréquents et petits.
+   - Tests automatisés couvrants.
+   - Builds rapides et reproductibles.
+   - Surveillance et rollback faciles en cas d’échec.
+   - Gestion des versions et artefacts (Docker, Maven, etc.).
+
+5. Exemple de pipeline typique
+
+   - Commit → Build → Tests unitaires → Tests intégration Si OK → Package Docker / Jar -> Déploiement (manual ou auto)
+
+   * Déploiement automatique sur environnement staging
+   * Si OK → Déploiement production (manual ou auto)
+
+Pipeline CI (Intégration Continue)
+[Commit / Push] → [Build Automatisée] → [Tests Unitaires] → [Tests d'Intégration] → [Feedback rapide]
+
+Pipeline CD (Delivery / Deployment Continu)
+[CI OK] → [Tests Fonctionnels / QA] → [Packaging Docker / Jar] → [Déploiement Staging] → [Validation Manuelle?] → [Production]
+
+  * Code Source : ton application (Java, Node, Python…).
+  * Dockerfile : instructions pour construire l’image.
+  * Build Image : création de l’image Docker.
+  * Registry : stockage des images pour partage.
+  * Pull & Run Container : récupération et lancement sur n’importe quel serveur.
+  * Environnement : conteneurs identiques sur dev, staging ou prod.
+
+[Code Source] → [Dockerfile] → [Build Image Docker] → [Registry Docker] → [Pull & Run Container] → [Environnement (Dev / Staging / Prod)]
+
+
+
+-------------------------------------------------------------------------------
+
+principaux anti-patterns:
+
+1️⃣ SPOF (Single Point of Failure)
+
+Définition : un composant unique dont la panne entraîne l’arrêt complet du système.
+Exemple : un serveur unique pour la base de données.
+Solution : redondance, clustering, load balancing.
+
+2️⃣ God Object / God Class
+
+Définition : une classe ou objet qui centralise trop de responsabilités.
+Problème : difficile à maintenir, tester, et évolutif.
+Solution : principe Single Responsibility (SRP), refactor en plusieurs classes.
+
+3️⃣ Spaghetti Code
+
+Définition : code mal structuré, très couplé et difficile à suivre.
+Problème : maintenance complexe, bugs fréquents.
+Solution : modularisation, bonnes pratiques OOP, tests.
+
+4️⃣ Lava Flow
+
+Définition : code mort ou ancien qui reste dans le projet sans être utilisé.
+Problème : augmente la complexité et le risque de bugs.
+Solution : refactoring régulier, suppression du code inutile.
+
+5️⃣ Golden Hammer
+
+Définition : utiliser toujours le même outil ou pattern pour tout problème.
+Problème : mauvaise solution pour certains cas spécifiques.
+Solution : choisir l’outil ou pattern adapté au problème.
+
+6️⃣ Reinventing the Wheel 
+
+Définition : réécrire des solutions déjà existantes et éprouvées.
+Problème : perte de temps et code moins fiable.
+Solution : frameworks/libs ... 
+
+-------------------------------------------------------------------------------
+
+
+Incoming Request
+     |
+     v
+Spring Security Filters (authentication, CORS)
+     |
+     v
+Controllers / Gateway routing / downstream
+     |
+     v
+corsHeaderDedupFilter runs -> deduplicates headers
+     |
+     v
+Response sent to client
+
+-------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
 
 
