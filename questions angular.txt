@@ -1,0 +1,487 @@
+# Entretien Technique Angular - Guide Sénior
+
+## TABLE DES MATIÈRES
+1. Architecture et Patterns
+2. Micro Frontends
+3. Signals vs RxJS
+4. Performance
+5. Sécurité
+6. Routing Avancé
+7. Testing
+8. Questions Pièges
+
+## 1. ARCHITECTURE ET PATTERNS
+
+### Q1: Migration d'Angular 12 vers 17
+Situation: Application grande (50 modules) avec Angular 12 et RxJS 6.
+
+Questions:
+1. Quelle stratégie de migration recommandez-vous ?
+2. Comment gérez-vous les breaking changes de RxJS ?
+3. Faut-il migrer vers les composants standalone ?
+
+Réponses attendues:
+
+Pour la migration:
+Étape 1: Mettre à jour version par version
+Angular 12 → 13 → 14 → 15 → 16 → 17
+
+Étape 2: Tester à chaque version
+npm install rxjs-compat  // Pour compatibilité temporaire
+
+Étape 3: Migrer progressivement
+Garder certains modules, convertir d'autres en standalone
+
+Pour les composants standalone:
+Avantages:
+- Plus simple (moins de code)
+- Meilleure performance (tree-shaking)
+- Chargement plus rapide
+
+Inconvénients:
+- Migration longue pour grandes applications
+- Certaines librairies pas encore compatibles
+
+Recommandation:
+Convertir module par module, tester chaque conversion.
+
+### Q2: Architecture Clean Architecture
+Question: Comment implémenter Clean Architecture dans Angular ?
+
+Structure proposée:
+src/
+├── core/           # Logique métier (indépendant d'Angular)
+│   ├── entities/   # Objets métier
+│   ├── use-cases/  # Cas d'utilisation
+│   └── ports/      # Interfaces
+├── infrastructure/ # Implémentations techniques
+│   ├── http/      # Services API
+│   └── storage/   # LocalStorage, IndexedDB
+└── presentation/   # Composants Angular
+    ├── components/ # Composants visuels
+    └── pages/      # Pages/écrans
+
+## 2. MICRO FRONTENDS
+
+### Q3: Qu'est-ce qu'un Micro Frontend ?
+Définition simple: Technique pour diviser une grande application en petites applications indépendantes.
+
+Exemple concret:
+Application E-commerce:
+- Micro-app 1: Catalogue produits (équipe A)
+- Micro-app 2: Panier (équipe B)
+- Micro-app 3: Paiement (équipe C)
+- Micro-app 4: Admin (équipe D)
+
+### Q4: Comment implémenter avec Angular ?
+Option 1: Module Federation (Webpack 5)
+Configuration shell (application principale)
+
+Option 2: Web Components
+Micro frontend exporté comme Web Component
+
+### Q5: Avantages et Inconvénients
+Avantages:
+- Équipes autonomes
+- Déploiements indépendants
+- Technologie différente par MFE
+- Maintenance plus simple
+
+Inconvénients:
+- Performance (plus de chargements)
+- Cohérence UI difficile
+- Gestion d'état complexe
+- Débogage plus difficile
+
+## 3. SIGNALS vs RXJS
+
+### Q6: Quand utiliser Signals ?
+Signals c'est pour:
+- État local dans un composant
+- Calculs synchrones (pas d'async)
+- Réactivité simple
+
+Exemple Signal:
+@Component({
+  template: `
+    <p>Compteur: {{ count() }}</p>
+    <p>Double: {{ double() }}</p>
+    <button (click)="increment()">+</button>
+  `
+})
+export class CounterComponent {
+  // Signal simple
+  count = signal(0);
+  
+  // Signal calculé
+  double = computed(() => this.count() * 2);
+  
+  increment() {
+    this.count.update(c => c + 1);
+  }
+}
+
+### Q7: Quand garder RxJS ?
+RxJS c'est pour:
+- Appels HTTP (API)
+- Événements utilisateur (clics, saisie)
+- Websockets, timers
+- Opérations complexes (debounce, switchMap)
+
+Exemple RxJS:
+@Injectable()
+export class SearchService {
+  search(term: string): Observable<Product[]> {
+    return this.http.get<Product[]>(`/api/search?q=${term}`).pipe(
+      debounceTime(300),        // Attendre que l'utilisateur arrête de taper
+      distinctUntilChanged(),   // Éviter requêtes identiques
+      catchError(() => of([]))  // Gérer les erreurs
+    );
+  }
+}
+
+## 4. PERFORMANCE
+
+### Q9: Problème: Application lente
+Symptômes: Scrolling lent, boutons qui lag, chargement long.
+
+Solutions:
+
+1. Change Detection:
+AVANT (problème):
+@Component({
+  template: `{{ heavyCalculation() }}`
+})
+export class SlowComponent {
+  heavyCalculation() {
+    // Appelé à chaque cycle (60 fois/sec)
+    return performHeavyWork();
+  }
+}
+
+APRÈS (solution):
+@Component({
+  template: `{{ cachedValue }}`,
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class FastComponent {
+  cachedValue: number;
+  
+  ngOnInit() {
+    // Calculé une seule fois
+    this.cachedValue = performHeavyWork();
+  }
+}
+
+2. Optimiser *ngFor:
+<!-- AVANT (lent avec 1000+ éléments) -->
+<div *ngFor="let item of items">
+  {{ item.name }}
+</div>
+
+<!-- APRÈS (avec trackBy) -->
+<div *ngFor="let item of items; trackBy: trackById">
+  {{ item.name }}
+</div>
+
+trackById(index: number, item: any): number {
+  return item.id; // Angular recycle les éléments existants
+}
+
+3. Lazy Loading:
+const routes: Routes = [
+  {
+    path: 'admin',
+    loadChildren: () => import('./admin/admin.module')
+      .then(m => m.AdminModule)  // Chargé seulement quand nécessaire
+  }
+];
+
+### Q10: Outils de Diagnostic
+1. Angular DevTools:
+- Extension Chrome
+- Voir le arbre des composants
+- Profiler la performance
+
+2. Lighthouse:
+npm install -g lighthouse
+lighthouse http://localhost:4200 --view
+
+3. Bundle Analyzer:
+npm run build --stats-json
+npx webpack-bundle-analyzer dist/stats.json
+
+## 5. SÉCURITÉ
+
+### Q11: Protection contre XSS
+Problème: Comment éviter les injections de code ?
+
+Mauvaise pratique:
+// DANGEREUX !
+this.userContent = `<script>alert('hack')</script>`;
+
+// Dans le template:
+<div [innerHTML]="userContent"></div>
+
+Bonne pratique:
+import { DomSanitizer } from '@angular/platform-browser';
+
+constructor(private sanitizer: DomSanitizer) {}
+
+// Angular nettoie automatiquement
+safeContent = this.sanitizer.bypassSecurityTrustHtml(userContent);
+// Utiliser seulement si vraiment nécessaire
+
+### Q12: Authentification et Autorisation
+Guards Angular:
+// Guard d'authentification
+@Injectable()
+export class AuthGuard implements CanActivate {
+  canActivate(): boolean {
+    if (this.authService.isLoggedIn()) {
+      return true;
+    }
+    this.router.navigate(['/login']);
+    return false;
+  }
+}
+
+// Utilisation dans les routes
+const routes: Routes = [
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
+    canActivate: [AuthGuard]  // Protégé
+  }
+];
+
+Nouvelle syntaxe (Angular 15+):
+export const authGuard: CanActivateFn = () => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
+  
+  return authService.isLoggedIn() 
+    ? true 
+    : router.createUrlTree(['/login']);
+};
+
+## 6. ROUTING AVANCÉ
+
+### Q13: Navigation avec Paramètres
+// 1. Navigation avec paramètres
+this.router.navigate(['/product', productId]);
+
+// 2. Récupération dans le composant
+constructor(private route: ActivatedRoute) {}
+
+ngOnInit() {
+  this.route.params.subscribe(params => {
+    const id = params['id'];
+    this.loadProduct(id);
+  });
+  
+  // Ou avec snapshot (une seule fois)
+  const id = this.route.snapshot.params['id'];
+}
+
+### Q14: Route Guards avancés
+Exemple: Vérifier les permissions
+@Injectable()
+export class RoleGuard implements CanActivate {
+  canActivate(route: ActivatedRouteSnapshot): boolean {
+    const requiredRole = route.data['requiredRole'];
+    const userRole = this.authService.getUserRole();
+    
+    return userRole === requiredRole;
+  }
+}
+
+// Utilisation
+const routes: Routes = [
+  {
+    path: 'admin',
+    component: AdminComponent,
+    canActivate: [RoleGuard],
+    data: { requiredRole: 'ADMIN' }
+  }
+];
+
+## 7. TESTING
+
+### Q15: Testing de Components
+describe('UserListComponent', () => {
+  let component: UserListComponent;
+  let fixture: ComponentFixture<UserListComponent>;
+  
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [UserListComponent], // Standalone component
+      providers: [
+        {
+          provide: UserService,
+          useValue: {
+            getUsers: () => of([
+              { id: 1, name: 'Alice' },
+              { id: 2, name: 'Bob' }
+            ])
+          }
+        }
+      ]
+    }).compileComponents();
+    
+    fixture = TestBed.createComponent(UserListComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+  
+  it('should display users', () => {
+    const compiled = fixture.nativeElement;
+    expect(compiled.textContent).toContain('Alice');
+    expect(compiled.textContent).toContain('Bob');
+  });
+});
+
+### Q16: Testing de Services
+describe('UserService', () => {
+  let service: UserService;
+  let httpMock: HttpTestingController;
+  
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule]
+    });
+    
+    service = TestBed.inject(UserService);
+    httpMock = TestBed.inject(HttpTestingController);
+  });
+  
+  it('should fetch users', () => {
+    const mockUsers = [{ id: 1, name: 'Test' }];
+    
+    service.getUsers().subscribe(users => {
+      expect(users).toEqual(mockUsers);
+    });
+    
+    const req = httpMock.expectOne('/api/users');
+    expect(req.request.method).toBe('GET');
+    req.flush(mockUsers);
+  });
+  
+  afterEach(() => {
+    httpMock.verify(); // Vérifier qu'il n'y a pas de requêtes en attente
+  });
+});
+
+## 8. QUESTIONS PIÈGES
+
+### Q17: Problème classique - Changements non détectés
+@Component({
+  template: `{{ user.name }}`
+})
+export class ProblemComponent implements OnInit {
+  user = { name: 'John' };
+  
+  ngOnInit() {
+    setTimeout(() => {
+      this.user.name = 'Jane'; // Changement non détecté !
+    }, 1000);
+  }
+}
+
+Solution:
+Option 1: Créer un nouvel objet
+this.user = { ...this.user, name: 'Jane' };
+
+Option 2: Utiliser signal
+user = signal({ name: 'John' });
+this.user.set({ name: 'Jane' });
+
+Option 3: Changement manuel
+this.user.name = 'Jane';
+this.changeDetectorRef.detectChanges();
+
+### Q18: Problème de Subscription qui fuit
+MAUVAIS (memory leak)
+ngOnInit() {
+  this.service.data$.subscribe(data => {
+    this.data = data;
+  });
+  // Subscription jamais désabonnée !
+}
+
+BON
+private destroy$ = new Subject<void>();
+
+ngOnInit() {
+  this.service.data$.pipe(
+    takeUntil(this.destroy$)
+  ).subscribe(data => {
+    this.data = data;
+  });
+}
+
+ngOnDestroy() {
+  this.destroy$.next();
+  this.destroy$.complete();
+}
+
+## CHECKLIST ÉVALUATION SÉNIOR
+
+Niveau Junior (0-2 ans)
+[ ] Connaît les bases d'Angular
+[ ] Peut créer des composants simples
+[ ] Comprend les services
+[ ] Utilise RxJS basique
+
+Niveau Mid (2-4 ans)
+[ ] Architecture de modules
+[ ] RxJS avancé (operators)
+[ ] Testing unitaire
+[ ] Performance basique
+[ ] Routing complexe
+
+Niveau Senior (4+ ans)
+[ ] Architecture: Justifie ses choix
+[ ] Performance: Diagnostique et optimise
+[ ] Migration: Planifie et exécute
+[ ] Sécurité: Implémente complètement
+[ ] Équipe: Mentor, définit les standards
+[ ] Business: Comprend l'impact des décisions
+
+## CONSEILS POUR L'ENTRETIEN
+
+Pour le candidat:
+1. Demandez des précisions: "Quelle est la taille de l'application ?"
+2. Expliquez vos choix: "Je choisirais RxJS parce que..."
+3. Montrez plusieurs solutions: "On pourrait faire A ou B, voici les avantages de chaque"
+4. Parlez d'expérience réelle: "Dans mon dernier projet, j'ai rencontré ce problème et voici comment je l'ai résolu"
+
+Pour l'intervieweur:
+1. Donnez un contexte réel: Pas de questions théoriques pures
+2. Écoutez le raisonnement: La réponse est moins importante que le processus
+3. Testez la communication: Peut-il expliquer à un junior ?
+4. Vérifiez l'humilité: Reconnaît-il ses limites ?
+
+## RESSOURCES PRATIQUES
+
+Pour se préparer:
+1. Angular Documentation: angular.io
+2. RxJS Operators: rxmarbles.com
+3. Performance: web.dev/angular
+4. Security: owasp.org
+
+Projets à connaître:
+- Angular CLI: Outils de build
+- Angular Material: Components UI
+- NgRx/NGXS: State management
+- Jest/Vitest: Alternatives à Karma
+
+Dernier conseil: Un bon senior Angular n'est pas celui qui connaît toutes les réponses, mais celui qui sait trouver les bonnes solutions aux bons problèmes.
+
+---
+
+**Note:** Pour télécharger ce fichier, faites:
+1. Ctrl+S (Windows) ou Cmd+S (Mac)
+2. Choisissez l'emplacement
+3. Nommez le fichier "guide-entretien-angular.txt"
+4. Enregistrez
